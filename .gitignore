@@ -1,0 +1,4 @@
+config/*.json
+!config/example_mac.json
+
+.idea

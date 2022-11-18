@@ -1,0 +1,38 @@
+{
+  "os": "mac",
+  "apps": [
+    {
+      "name": "LuLu",
+      "fileName": "LuLu.app",
+      "locations": [
+        "/**"
+      ]
+    },
+    {
+      "name": "Edge",
+      "fileName": "Microsoft Edge.app",
+      "locations": [
+        "/Applications"
+      ]
+    },
+    {
+      "name": "Slack",
+      "fileName": "Slack.app",
+      "locations": [
+        "/Applications",
+        "~/**"
+      ]
+    }
+  ],
+  "browsers": [
+    {
+      "name": "chrome",
+      "urls": [
+        {
+          "url": "https://www.twitter.com",
+          "selector": "div"
+        }
+      ]
+    }
+  ]
+}
