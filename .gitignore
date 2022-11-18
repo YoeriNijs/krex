@@ -1,4 +1,8 @@
 config/*.json
 !config/example_*.json
 
+reports/**/*.*
+!reports/.gitkeep
+
 .idea
+**/**/__pycache__

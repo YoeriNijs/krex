@@ -1,15 +1,21 @@
 import logging
 import json
 import os
+import time
 
 from typing import Final
 
 from util.os_util import OSName
-from visitors._app_visitor import AppVisitor
+from visitors.app_visitor import AppVisitor
+from visitors.browser_visitor import BrowserVisitor
 
 CONFIG_PATH: Final = "./config"
 CONFIG_EXT: Final = ".json"
 CONFIG_GLOB_PATTERN: Final = f"*{CONFIG_EXT}"
+REPORT_FILE_NAME: Final = "report.json"
+REPORT_PREFIX: Final = "report_"
+REPORTS_DIR: Final = "reports"
+REPORT_SCREENSHOTS_DIR: Final = "screenshots"
 
 
 class Krex:
@@ -17,6 +23,7 @@ class Krex:
     def __init__(self):
         self.__files_and_directories = os.listdir(CONFIG_PATH)
         self.__app_visitor = AppVisitor()
+        self.__browser_visitor = BrowserVisitor(REPORT_PREFIX)
 
     def start(self):
         for file_or_directory in self.__files_and_directories:
@@ -26,7 +33,7 @@ class Krex:
             if config is not None:
                 results = self.__visit(config)
                 results_json = json.dumps(results, sort_keys=True, indent=4)
-                print(results_json)
+                self.__report(results_json)
 
     def __read_config_file(self, file_or_directory) -> str | None:
         logging.info(f"Executing config file {file_or_directory}")
@@ -44,27 +51,48 @@ class Krex:
 
     def __visit(self, config) -> list:
         results = []
-        return self.__visit_apps(config, results)
+        app_results = self.__visit_apps(config)
+        if len(app_results) > 0:
+            results.append(app_results)
+        browser_results = self.__visit_browsers(config)
+        if len(browser_results) > 0:
+            results.append(browser_results)
+        return results
 
-    def __visit_apps(self, config, results) -> list:
+    def __visit_apps(self, config) -> dict:
         try:
             apps = config['apps']
             app_results = self.__app_visitor.visit(apps)
-            results.append(app_results)
+            return app_results
         except KeyError:
             logging.debug("Skip app visits since there are none")
             pass
-        return results
 
-    def __visit_browsers(self, config, results) -> list:
+    def __visit_browsers(self, config) -> dict:
         try:
             browsers = config['browsers']
-            browser_results = self.__app_visitor.visit(browsers)
-            results.append(browser_results)
+            browser_results = self.__browser_visitor.visit(browsers)
+            return browser_results
         except KeyError:
             logging.debug("Skip browser visits since there are none")
             pass
-        return results
+
+    def __report(self, results_json):
+        current_time = time.time()
+        report_location = os.path.join(os.getcwd(), REPORTS_DIR, f"{REPORT_PREFIX}{current_time}")
+        os.mkdir(report_location)
+        os.mkdir(os.path.join(report_location, REPORT_SCREENSHOTS_DIR))
+
+        time.sleep(2)
+
+        with open(os.path.join(report_location, REPORT_FILE_NAME), "w") as fh:
+            fh.write(results_json)
+
+        cwd = os.getcwd()
+        files = os.listdir(cwd)
+        for file in files:
+            if file.startswith(REPORT_PREFIX):
+                os.replace(os.path.join(cwd, file), os.path.join(report_location, REPORT_SCREENSHOTS_DIR, file))
 
 
 krex = Krex()
