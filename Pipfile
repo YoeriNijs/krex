@@ -4,6 +4,9 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+beautifulsoup4 = "4.11.1"
+pyautogui = "0.9.53"
+Pillow = "9.3.0"
 
 [dev-packages]
 
