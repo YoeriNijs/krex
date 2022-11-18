@@ -1,6 +1,7 @@
 import logging
 import json
 import os
+import sys
 import time
 
 from typing import Final
@@ -93,6 +94,8 @@ class Krex:
         for file in files:
             if file.startswith(REPORT_PREFIX):
                 os.replace(os.path.join(cwd, file), os.path.join(report_location, REPORT_SCREENSHOTS_DIR, file))
+
+        print(f"Report saved to {report_location}")
 
 
 krex = Krex()
