@@ -53,10 +53,10 @@ class Krex:
     def __visit(self, config) -> list:
         results = []
         app_results = self.__visit_apps(config)
-        if len(app_results) > 0:
+        if app_results is not None and len(app_results) > 0:
             results.append(app_results)
         browser_results = self.__visit_browsers(config)
-        if len(browser_results) > 0:
+        if browser_results is not None and len(browser_results) > 0:
             results.append(browser_results)
         return results
 
@@ -82,7 +82,6 @@ class Krex:
         current_time = time.time()
         report_location = os.path.join(os.getcwd(), REPORTS_DIR, f"{REPORT_PREFIX}{current_time}")
         os.mkdir(report_location)
-        os.mkdir(os.path.join(report_location, REPORT_SCREENSHOTS_DIR))
 
         time.sleep(2)
 
@@ -93,6 +92,10 @@ class Krex:
         files = os.listdir(cwd)
         for file in files:
             if file.startswith(REPORT_PREFIX):
+                screenshots_dir = os.path.join(report_location, REPORT_SCREENSHOTS_DIR)
+                if not os.path.isdir(screenshots_dir):
+                    os.mkdir(screenshots_dir)
+
                 os.replace(os.path.join(cwd, file), os.path.join(report_location, REPORT_SCREENSHOTS_DIR, file))
 
         print(f"Report saved to {report_location}")

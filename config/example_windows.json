@@ -1,5 +1,48 @@
 {
   "os": "windows",
-  "apps": [],
-  "browsers": []
+  "apps": [
+    {
+      "name": "Firefox",
+      "fileName": "firefox.exe",
+      "locations": [
+        "C:\\Program Files\\Mozilla Firefox"
+      ]
+    },
+    {
+      "name": "Git",
+      "fileName": ".gitconfig",
+      "locations": [
+        "C:\\Users\\**"
+      ]
+    },
+    {
+      "name": "Ssh",
+      "fileName": "id_rsa",
+      "locations": [
+        "C:\\Users\\**\\.ssh"
+      ]
+    }
+  ],
+  "browsers": [
+    {
+      "name": "windows-default",
+      "urls": [
+        {
+          "name": "Gmail",
+          "link": "https://myaccount.google.com/personal-info",
+          "delay_in_ms": 5000
+        },
+        {
+          "name": "YouTube",
+          "link": "https://www.youtube.com/account",
+          "delay_in_ms": 5000
+        },
+        {
+          "name": "Twitter",
+          "link": "https://twitter.com/messages",
+          "delay_in_ms": 5000
+        }
+      ]
+    }
+  ]
 }

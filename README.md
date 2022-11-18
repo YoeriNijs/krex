@@ -72,3 +72,8 @@ to the current os automatically.
 ### Supported browsers
 For a list of supported webbrowsers, visit: https://docs.python.org/3/library/webbrowser.html
 
+### Run KRex
+After installing the dependencies by using Pip, you can run KRex like:
+```
+python ./krex.py
+```

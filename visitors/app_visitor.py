@@ -43,7 +43,10 @@ class AppVisitor(AbstractVisitor):
         return results
 
     def _search_by_full_locations(self, app_location, app_name, file_name, results):
-        files_in_location = os.listdir(app_location)
+        try:
+            files_in_location = os.listdir(app_location)
+        except FileNotFoundError:
+            return
         for file_in_location in files_in_location:
             if file_in_location == file_name:
                 self._report(app_name, file_name, app_location, results)

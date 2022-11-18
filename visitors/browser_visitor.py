@@ -38,7 +38,12 @@ class BrowserVisitor(AbstractVisitor):
                     logging.warning(f"Invalid browser: name property is missing {browser}")
                     continue
 
-                opened = webbrowser.get(browser_name).open_new(link)
+                try:
+                    opened = webbrowser.get(browser_name).open_new(link)
+                except webbrowser.Error:
+                    logging.error(f"Cannot open the webbrowser for {browser}. Do you have configured a valid browser? Check https://docs.python.org/3/library/webbrowser.html")
+                    opened = False
+
                 if opened:
                     try:
                         delay_in_ms = int(url['delay_in_ms'])
