@@ -57,8 +57,8 @@ class AppVisitor(AbstractVisitor):
             pattern = pattern + self.__path_sign
         pattern = pattern + file_name
         locations_by_pattern = glob.glob(pattern)
-        for _ in locations_by_pattern:
-            self._report(app_name, file_name, app_location, results)
+        for location_by_pattern in locations_by_pattern:
+            self._report(app_name, file_name, location_by_pattern, results)
 
     def _report(self, app_name, file_name, app_location, results) -> None:
         logging.info(f"Found {app_name} ({file_name}) in {app_location}")
