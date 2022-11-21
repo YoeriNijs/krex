@@ -5,7 +5,7 @@ import time
 
 from typing import Final
 
-from util.os_util import OSName
+from util.os_name import OSName
 from visitors.app_visitor import AppVisitor
 from visitors.browser_visitor import BrowserVisitor
 

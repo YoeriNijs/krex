@@ -1,5 +1,5 @@
 from visitors._abstract_visitor import AbstractVisitor
-from util.os_util import OSName
+from util.os_name import OSName
 import os
 import logging
 import glob
