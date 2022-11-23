@@ -24,5 +24,21 @@
       ]
     }
   ],
-  "browsers": []
+  "browsers": [
+    {
+      "name": "safari",
+      "urls": [
+        {
+          "name": "Twitter",
+          "link": "https://www.twitter.com",
+          "delay_in_ms": 5000
+        },
+        {
+          "name": "Facebook",
+          "link": "https://www.facebook.com",
+          "delay_in_ms": 5000
+        }
+      ]
+    }
+  ]
 }
