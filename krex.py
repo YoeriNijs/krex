@@ -25,7 +25,7 @@ class Krex:
         self.__files_and_directories = os.listdir(CONFIG_PATH)
         self.__app_visitor = AppVisitor()
         self.__browser_visitor = BrowserVisitor(REPORT_PREFIX)
-        self._set_custom_configs()
+        self.__set_custom_configs()
 
     def start(self):
         files_and_directories = []
@@ -47,7 +47,7 @@ class Krex:
             except FileNotFoundError as e:
                 logging.error(e)
 
-    def _set_custom_configs(self):
+    def __set_custom_configs(self) -> None:
         parser = argparse.ArgumentParser()
         parser.add_argument('-config', '--config')
         args = parser.parse_args()
@@ -104,7 +104,7 @@ class Krex:
             logging.debug("Skip browser visits since there are none")
             pass
 
-    def __report(self, results_json):
+    def __report(self, results_json) -> None:
         current_time = time.time()
         report_location = os.path.join(os.getcwd(), REPORTS_DIR, f"{REPORT_PREFIX}{current_time}")
         os.mkdir(report_location)
