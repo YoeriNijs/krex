@@ -77,3 +77,9 @@ After installing the dependencies by using Pip, you can run KRex like:
 ```
 python ./krex.py
 ```
+
+### Pass config manually
+You can pass your config manually as well. You can also pass multiple configs by separating them with a comma:
+```
+python ./krex.py -config loc/example_a.json,loc/example_b.json
+```

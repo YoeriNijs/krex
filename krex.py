@@ -2,6 +2,7 @@ import logging
 import json
 import os
 import time
+import argparse
 
 from typing import Final
 
@@ -24,20 +25,46 @@ class Krex:
         self.__files_and_directories = os.listdir(CONFIG_PATH)
         self.__app_visitor = AppVisitor()
         self.__browser_visitor = BrowserVisitor(REPORT_PREFIX)
+        self._set_custom_configs()
 
     def start(self):
-        for file_or_directory in self.__files_and_directories:
+        files_and_directories = []
+        if self.__custom_configs is None:
+            for file_or_directory in self.__files_and_directories:
+                files_and_directories.append(f"{CONFIG_PATH}/{file_or_directory}")
+        else:
+            files_and_directories = self.__custom_configs
+
+        for file_or_directory in files_and_directories:
             if not file_or_directory.endswith(CONFIG_EXT):
                 continue
-            config = self.__read_config_file(file_or_directory)
-            if config is not None:
-                results = self.__visit(config)
-                results_json = json.dumps(results, sort_keys=True, indent=4)
-                self.__report(results_json)
+            try:
+                config = self.__read_config_file(file_or_directory)
+                if config is not None:
+                    results = self.__visit(config)
+                    results_json = json.dumps(results, sort_keys=True, indent=4)
+                    self.__report(results_json)
+            except FileNotFoundError as e:
+                logging.error(e)
+
+    def _set_custom_configs(self):
+        parser = argparse.ArgumentParser()
+        parser.add_argument('-config', '--config')
+        args = parser.parse_args()
+        custom_configs_args = args.config
+        if custom_configs_args:
+            custom_configs_raw = custom_configs_args.split(',')
+            custom_configs_filtered = []
+            for custom_config in custom_configs_raw:
+                if custom_config.endswith(CONFIG_EXT):
+                    custom_configs_filtered.append(custom_config)
+            self.__custom_configs = custom_configs_filtered
+        else:
+            self.__custom_configs = None
 
     def __read_config_file(self, file_or_directory) -> str | None:
         logging.info(f"Executing config file {file_or_directory}")
-        with open(f"{CONFIG_PATH}/{file_or_directory}", "r") as file:
+        with open(file_or_directory, "r") as file:
             json_file = json.load(file)
             try:
                 json_os = OSName.by_name(json_file['os'])
